@@ -1,0 +1,8 @@
+torch1.7会报错，torch1.6可以
+rosrun image_view image_view image:=/rgb/image_raw_detected
+
+python detect_and_publish_ros.py --data ./data/custom.data --cfg ./cfg/yolov3-spp-r.cfg --weights ./weights/final.pt --img_topic /thermal/image_raw/compressed --publish
+
+rosbag play /media/tangzy/study/617/test0_20201227/withradar_20201227/bag1/20201227161724_02.bag
+
+rosbag play /media/tangzy/study/617/test0_20201227/withradar_20201227/bag2/20201227180500_02.bag用这个语句，有人有车还是夜间烟雾
