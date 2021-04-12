@@ -4,27 +4,6 @@
 Robust Object Classification of Occluded Objects in Forward Looking Infrared (FLIR) Cameras using Ultralytics YOLOv3 and Dark Chocolate.And you can run this project in ROS.
 
 
-
-![](example.png)
-
-#### Production Grade Results
-
-   1. <strong>mAP:</strong> ```0.961```
-   2. <strong>Recall:</strong> ```0.922```
-   3. <strong>F1:</strong> ```0.857```
-   
-![](https://github.com/joehoeller/Object-Detection-on-Thermal-Images/blob/master/results.png)
-
-#### Downloads needed to run codebase
-  
-   1. Download pre-trained weights here: [link](https://drive.google.com/drive/folders/1dV0OmvG4eZFtnh5WF0mby-jhkVy-HVco?usp=sharing)
-   
-   2. FLIR Thermal Images Dataset: [Download](https://www.flir.com/oem/adas/adas-dataset-form/)
-
-   3. Go into ```/data``` folder and unzip ```labels.zip```
-   
-   4. Addt'l instructions on how to run [Ultralytics Yolov3](https://github.com/ultralytics/yolov3)
-
 #### Instructions
 
 - Must have NVIDIA GPUs with Turing Architecture, Ubuntu and CUDA X installed if you want to reproduce results.
@@ -35,63 +14,60 @@ Robust Object Classification of Occluded Objects in Forward Looking Infrared (FL
 
 - Converted labels from [Dark Chocolate](https://github.com/joehoeller/Dark-Chocolate) are located in data/labels, which you unzipped above.
 
-- The custom *.cfg with modified hyperparams is located in ```/cfg/yolov3-spp-r.cfg```.
+- The custom *.cfg with modified hyperparams is located in ```/scripts/cfg/yolov3-spp-r.cfg```.
 
-- Class names and custom data is in ```/data/custom.names``` and ```custom.data```.
+- Class names and custom data is in ```/scripts/data/custom.names``` and ```custom.data```.
 
+
+#### Downloads needed to run codebase
+  
+   1. Download pre-trained weights here: [link](https://drive.google.com/drive/folders/1dV0OmvG4eZFtnh5WF0mby-jhkVy-HVco?usp=sharing)
+   
+   2. FLIR Thermal Images Dataset: [Download](https://www.flir.com/oem/adas/adas-dataset-form/)
+
+   3. Go into ```scripts/data``` folder and unzip ```scripts/labels.zip```
+   
+   4. Addt'l instructions on how to run [Ultralytics Yolov3](https://github.com/ultralytics/yolov3)
+
+#### Requirements
+Python 3.5 or later with all requirements.txt dependencies installed
+```
+cd scripts
+pip install -r requirements.txt
+```
 
 #### Install & Run Code:
 
-After download is complete run pip install requirements, or click into the requriements.txt file for the Anaconda commands.
-Install COCO: ``` bash yolov3/data/get_coco_dataset.sh```, then add FLIR images to: ```/coco/images/FLIR_Dataset```. Select any random grouping of non-annotated images, (ctrl-click any random sample of 5 to 10, or 20 if you like), copy them, and them paste them into data/samples folder.
+- build messages
 
-- Go back to the root of the project where the requirements.txt file is and open a command prompt, run the following:
+```
+catkin build
+```
+- build cv_bridge
+  Because ros ```cv_bridge``` don't compatible with ```Python3```, you need to build cv_bridge with python3 in your workspace.
 
-$  ```python3 detect.py --data data/custom.data --cfg cfg/yolov3-spp-r.cfg --weights weights/custom.pt```
+  you can reference this answer 
+  ```https://stackoverflow.com/questions/49221565/unable-to-use-cv-bridge-with-ros-kinetic-and-python3 ```
 
-<strong>Modified config in ```yolov3-spp-r.cfg``` file; Leverages Spatial Pyramid Pooling with Ultralytics YOLOv3 for better feature extraction and higher precision on thermal images.</strong>
 
-<em>See Convolutional Neural Network Architecture below:</em>
 
-![](1_h-SYoymeVq5hSK3Vv3C-Ig.png)
-
-- At the root of the project, you will then see a folder named output get generated with annotated images and bounding boxes around the objects within the images you chose for the ``data/samples`` folder.
-
-- To get metrics, go back into command line at root of project and run: 
-
-  $ ```python (python cmd prompt)```
+- Run Code
   
-  $ ```from utils import utils```
-  
-  $ ```utils.plot_results()```
-  
+Before you run this project, you need edit ```object_detection_by_camera.zsh``` line 8,
+```
+source ~/software/catkin_workspace/install/setup.zsh --extend
+```
+to your cv_bridge install path.
 
-You will then see an image of charts get generated at root of project called results.png
+and run code
 
-- To get class-wise scores run ( * Note that ```-r``` /yolov3-spp-r.cfg is the altered CNN architecture):
+```
+sudo chmod +x object_detection_by_camera.zsh
+./object_detection_by_camera.zsh
+```
 
-$ ```python3 test.py --cfg cfg/yolov3-spp-r.cfg --weights weights/custom.pt --data data/custom.data```
+#### Result
+![avatar](/image/result1.png)
 
-
-#### Need consulting to better understand computer vision implmentation for better business outcomes?
-If Artifical Intelligence Applications are important to you or your business, please get in [touch](https://www.linkedin.com/in/computer-vision-engineer/) or email ```joehoeller@gmail.com```.
-
-#### Consulting ideas on which this production-grade project could be forked to for real-word use cases:
-
- - *Search and Rescue for Public Safety:* Object Classification in Thermal Images using Convolutional Neural Networks for Search and Rescue Missions (SAR) with Unmanned Aerial Systems (UAS).
-
- - *Defense and Aerospace: Detecting IEDs (Improvised Explosive Devices):* in live combat war zones.
-Self-Driving Cars: Autonomous vehicles, personal or commercial.
-
- - *Industrial Applications:* Electrical grid monitoring, wind power, and oil refinery monitoring.
- 
- - *Improved Breast Cancer Screening & Detection:* Automated analysis of tumor segmentation in thermal images using artificial intelligence increases the accuracy of detecting breast cancer, and enables use in breast cancer screening programs.
-
- - *Segmentation of Industrial Material types for automated assembly lines:* Deep Thermal Imaging for material type recognition of Spatial Surface Temperature Patterns (SSTP).
-
- - *Sense and Detect Active School Shooters:* Ensemble with Doppler signal processing methods for Concealed Weapon Detection in a Human Body by Infrared Imaging.
- 
-
- - *NASA/ESA Land Rovers (e.g.; Mars Exploration Rovers (MER) Spirit and Opportunity):* Fork GitHub repo and customize to measure heat signatures from various extraterrestrial objects. This will allow one to determine what materials/composites are in these objects. Also allows (martian) rover to further explore extra-terrestrial planets while identifying objects we cannot see in normal spectrum.
 
 
